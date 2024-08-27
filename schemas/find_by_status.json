@@ -60,7 +60,6 @@
       },
       "required": [
         "id",
-        "category",
         "name",
         "photoUrls",
         "tags",

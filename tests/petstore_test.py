@@ -34,11 +34,11 @@ def test_find_by_status(base_url, status):
 @allure.story("Pet")
 @allure.severity(allure.severity_level.NORMAL)
 @allure.title("Find by pet ID")
-def test_find_by_status(base_url):
-    response = requests.get(base_url + '/v2/pet/9223372036854773000')
+def test_find_pet_by_id(base_url):
+    response = requests.get(base_url + '/v2/pet/9223372036854775000')
     assert response.status_code == 200
-    assert response.json()["id"] == 9223372036854773000
-    assert response.json()["name"] == "fish"
+    assert response.json()["id"] == 9223372036854775000
+    assert response.json()["name"] == "doggie"
 
     schema = path('find_by_pet_id.json')
 
@@ -47,351 +47,228 @@ def test_find_by_status(base_url):
         validate(response.json(), schema=json.loads(f))
 
 
+@allure.feature("User")
+@allure.story("User")
+@allure.severity(allure.severity_level.BLOCKER)
+@allure.title("Create User")
+def test_create_user(base_url):
+    payload = {
+        "username": "Andrey",
+        "firstName": "Ivanov",
+        "lastName": "string",
+        "email": "test@test.ru",
+        "password": "PassW0rd$",
+        "phone": "11111111",
+        "userStatus": 1
+    }
+    headers = {
+        "Content-Type": "application/json",
+        "accept": "application/json"
+    }
+    response = requests.post(base_url + '/v2/user', headers=headers, json=payload)
+    assert response.status_code == 200
+    assert response.json()["type"] == "unknown"
+    assert response.json()["message"], "message не может быть пустым"
+
+    schema = path('create_user.json')
+
+    with open(schema) as file:
+        f = file.read()
+        validate(response.json(), schema=json.loads(f))
 
 
+@allure.feature("User")
+@allure.story("User")
+@allure.severity(allure.severity_level.BLOCKER)
+@allure.title("Create User with array")
+def test_create_user_with_array(base_url):
+    payload = [
+        {
+            "username": "Andrey",
+            "firstName": "Ivanov",
+            "lastName": "string",
+            "email": "test@test.ru",
+            "password": "PassW0rd$",
+            "phone": "11111111",
+            "userStatus": 1
+        }
+    ]
+    headers = {
+        "Content-Type": "application/json",
+        "accept": "application/json"
+    }
+    response = requests.post(base_url + '/v2/user/createWithArray', headers=headers, json=payload)
+    assert response.status_code == 200
+    assert response.json()["type"] == "unknown"
+    assert response.json()["message"], "ok"
+
+    schema = path('create_user.json')
+
+    with open(schema) as file:
+        f = file.read()
+        validate(response.json(), schema=json.loads(f))
 
 
+@allure.feature("User")
+@allure.story("User")
+@allure.severity(allure.severity_level.BLOCKER)
+@allure.title("Create User with list")
+def test_create_user_with_list(base_url):
+    payload = [
+        {
+            "username": "Andrey",
+            "firstName": "Ivanov",
+            "lastName": "string",
+            "email": "test@test.ru",
+            "password": "PassW0rd$",
+            "phone": "11111111",
+            "userStatus": 1
+        }
+    ]
+    headers = {
+        "Content-Type": "application/json",
+        "accept": "application/json"
+    }
+    response = requests.post(base_url + '/v2/user/createWithList', headers=headers, json=payload)
+    assert response.status_code == 200
+    assert response.json()["type"] == "unknown"
+    assert response.json()["message"], "ok"
+
+    schema = path('create_user.json')
+
+    with open(schema) as file:
+        f = file.read()
+        validate(response.json(), schema=json.loads(f))
 
 
+@allure.feature("User")
+@allure.story("User")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("Get User")
+def test_get_user(base_url):
+    response = requests.get(base_url + '/v2/user/Andrey')
+    assert response.status_code == 200
+    assert response.json()["username"] == "Andrey"
+    assert response.json()["firstName"] == "Ivanov"
+    assert response.json()["email"] == "test@test.ru"
 
-####################################################################################
+    schema = path('get_user.json')
 
-# def test_single_user(base_url):
-#     id = 2
-#     email = 'janet.weaver@reqres.in'
-#     first_name = 'Janet'
-#     last_name = 'Weaver'
-#     response = requests.get(base_url + '/api/users/2')
-#     assert response.status_code == 200
-#     assert response.json()['data']['id'] == id
-#     assert response.json()['data']['email'] == email
-#     assert response.json()['data']['first_name'] == first_name
-#     assert response.json()['data']['last_name'] == last_name
-#     schema = path('single_user.json')
-#
-#     with open(schema) as file:
-#         f = file.read()
-#         validate(response.json(), schema=json.loads(f))
-#
-#
-# def test_single_user_not_found(base_url):
-#     response = requests.get(base_url + '/api/users/23')
-#     assert response.status_code == 404
-#     assert response.json() == {}
-#
-#
-# def test_list_resource(base_url):
-#     text = 'To keep ReqRes free, contributions towards server costs are appreciated!'
-#     response = requests.get(base_url + '/api/unknown')
-#     assert response.status_code == 200
-#     assert response.json()['data'] != []
-#     assert response.json()['total'] == 12
-#     assert response.json()['support']['text'] == text
-#
-#     schema = path('list_resources.json')
-#
-#     with open(schema) as file:
-#         f = file.read()
-#         validate(response.json(), schema=json.loads(f))
-#
-#
-# def test_single_resource(base_url):
-#     data = {
-#         "id": 2,
-#         "name": "fuchsia rose",
-#         "year": 2001,
-#         "color": "#C74375",
-#         "pantone_value": "17-2031"
-#     }
-#     response = requests.get(base_url + '/api/unknown/2')
-#     assert response.status_code == 200
-#     assert response.json()['data'] == data
-#
-#     schema = path('single_resources.json')
-#
-#     with open(schema) as file:
-#         f = file.read()
-#         validate(response.json(), schema=json.loads(f))
-#
-#
-# def test_single_resource_not_found(base_url):
-#     response = requests.get(base_url + '/api/unknown/23')
-#     assert response.status_code == 404
-#
-#
-# def test_login_successful(base_url):
-#     payload = {
-#         "email": "eve.holt@reqres.in",
-#         "password": "cityslicka"
-#     }
-#     response = requests.post(base_url + '/api/login', data=payload)
-#     assert response.status_code == 200
-#     assert 'token' in response.json()
-#     assert response.json()['token']
-#
-#     schema = path('login_successful.json')
-#
-#     with open(schema) as file:
-#         f = file.read()
-#         validate(response.json(), schema=json.loads(f))
-#
-#
-# def test_login_unsuccessful(base_url):
-#     payload = {
-#         "email": "peter@klaven"
-#     }
-#     error = 'Missing password'
-#     response = requests.post(base_url + '/api/login', data=payload)
-#     assert response.status_code == 400
-#     assert response.json()['error'] == error
-#
-#
-# def test_register_successful(base_url):
-#     payload = {
-#         "email": "eve.holt@reqres.in",
-#         "password": "pistol"
-#     }
-#     response = requests.post(base_url + '/api/register', data=payload)
-#     assert response.status_code == 200
-#     assert response.json()['id'] == 4
-#     assert response.json()['token']
-#
-#
-# def test_register_unsuccessful(base_url):
-#     payload = {
-#         "email": "sydney@fife"
-#     }
-#     error = 'Missing password'
-#     response = requests.post(base_url + '/api/register', data=payload)
-#     assert response.status_code == 400
-#     assert response.json()['error'] == error
-#
-#
-# def test_create(base_url):
-#     payload = {
-#         "name": "morpheus",
-#         "job": "leader"
-#     }
-#     name = 'morpheus'
-#     job = 'leader'
-#     response = requests.post(base_url + '/api/users', data=payload)
-#     assert response.status_code == 201
-#     assert response.json()['name'] == name
-#     assert response.json()['job'] == job
-#     assert response.json()['id']
-#
-#
-# def test_delete(base_url):
-#     payload = {
-#         "name": "morpheus",
-#         "job": "leader"
-#     }
-#     response = requests.post(base_url + '/api/users', data=payload)
-#     id = response.json()['id']
-#     delete = requests.delete(base_url + '/api/users/' + id)
-#     assert delete.status_code == 204
-#
-#
-# def test_update(base_url):
-#     payload_post = {
-#         "name": "morpheus",
-#         "job": "leader"
-#     }
-#     payload_update = {
-#         "name": "morpheus",
-#         "job": "zion resident"
-#     }
-#     new_job = 'zion resident'
-#     response = requests.post(base_url + '/api/users', data=payload_post)
-#     id = response.json()['id']
-#     update = requests.put(base_url + '/api/users/' + id, data=payload_update)
-#     assert update.status_code == 200
-#     assert update.json()['job'] == new_job
-#
-#
-# def test_patch(base_url):
-#     payload_post = {
-#         "name": "morpheus",
-#         "job": "leader"
-#     }
-#     payload_update = {
-#         "name": "morpheus",
-#         "job": "zion resident"
-#     }
-#     new_job = 'zion resident'
-#     response = requests.post(base_url + '/api/users', data=payload_post)
-#     id = response.json()['id']
-#     update = requests.patch(base_url + '/api/users/' + id, data=payload_update)
-#     assert update.status_code == 200
-#     assert update.json()['job'] == new_job
-
-###########################################################################################
+    with open(schema) as file:
+        f = file.read()
+        validate(response.json(), schema=json.loads(f))
 
 
+@allure.feature("User")
+@allure.story("User")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("Get not found User")
+def test_get_not_found_user(base_url):
+    response = requests.get(base_url + '/v2/user/user55')
+    assert response.status_code == 404
+    assert response.json()["type"] == "error"
+    assert response.json()["message"] == "User not found"
+
+    schema = path('user_not_found.json')
+
+    with open(schema) as file:
+        f = file.read()
+        validate(response.json(), schema=json.loads(f))
 
 
+@allure.feature("User")
+@allure.story("User")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("Get empty User")
+def test_get_empty_user(base_url):
+    response = requests.get(base_url + '/v2/user/')
+    assert response.status_code == 405
 
-    #
-    # @ Test
-    # @ Feature("User")
-    # @ Story("User")
-    # @ DisplayName("Create User")
-    # @ Severity(SeverityLevel.BLOCKER)
-    # void createUserTest() {
-    # User newUser = DataGenerator.getUser(8, 16, true, true, true);
-    #
-    # String response = given(Specs.request)
-    # .body(newUser)
-    # .when()
-    # .post("/v2/user")
-    # .then()
-    # .spec(Specs.responseSpec)
-    # .extract().path("message");
-    #
-    # assertThat(response).isEqualTo(newUser.getId().toString());
-    # }
-    #
-    # @ Test
-    # @ Feature("User")
-    # @ Story("User")
-    # @ DisplayName("Create User with array")
-    # @ Severity(SeverityLevel.BLOCKER)
-    # void createWithArrayTest() {
-    # User newUser = DataGenerator.getUser(8, 16, true, true, true);
-    #
-    # String response = given(Specs.request)
-    # .body(newUser)
-    # .when()
-    # .post("/v2/user/createWithArray")
-    # .then()
-    # .statusCode(500)
-    # .extract().path("message");
-    #
-    # assertThat(response).isEqualTo("something bad happened");
-    # }
-    #
-    # @ Test
-    # @ Feature("User")
-    # @ Story("User")
-    # @ DisplayName("Create User with list")
-    # @ Severity(SeverityLevel.BLOCKER)
-    # void createWithListTest() {
-    # User newUser = DataGenerator.getUser(8, 16, true, true, true);
-    #
-    # String response = given(Specs.request)
-    # .body(newUser)
-    # .when()
-    # .post("/v2/user/createWithList")
-    # .then()
-    # .statusCode(500)
-    # .extract().path("type");
-    #
-    # assertThat(response).isEqualTo("unknown");
-    # }
-    #
-    # @ Test
-    # @ Feature("User")
-    # @ Story("User")
-    # @ DisplayName("Get User")
-    # @ Severity(SeverityLevel.CRITICAL)
-    # void getUserTest() {
-    # given(Specs.request)
-    # .when()
-    # .get("v2/user/user564564654")
-    # .then()
-    # .spec(Specs.responseSpec)
-    # .body("id", is (4984564564654L));
-    # }
-    #
-    # @ Test
-    # @ Feature("User")
-    # @ Story("User")
-    # @ DisplayName("Get empty User")
-    # @ Severity(SeverityLevel.TRIVIAL)
-    # void getEmptyUserTest() {
-    # given(Specs.request)
-    # .when()
-    # .get("v2/user/user55")
-    # .then()
-    # .statusCode(404)
-    # .body("message", is ("User not found"));
-    # }
-    #
-    # @ Test
-    # @ Feature("User")
-    # @ Story("User")
-    # @ DisplayName("Get null User")
-    # @ Severity(SeverityLevel.TRIVIAL)
-    # void getNullUserTest() {
-    # given(Specs.request)
-    # .when()
-    # .get("v2/user/")
-    # .then()
-    # .statusCode(405);
-    # }
-    #
-    # @ Test
-    # @ Feature("Order")
-    # @ Story("Order")
-    # @ DisplayName("Create Order")
-    # @ Severity(SeverityLevel.NORMAL)
-    # void createOrderTest() {
-    # Order newOrder = DataGenerator.getOrder(8, 16, true, true, true);
-    #
-    # Integer response = given(Specs.request)
-    # .body(newOrder)
-    # .when()
-    # .post("/v2/store/order")
-    # .then()
-    # .spec(Specs.responseSpec)
-    # .extract().path("id");
-    #
-    # assertThat(response).isEqualTo(newOrder.getId());
-    # }
-    #
-    # @ Test
-    # @ Feature("Store")
-    # @ Story("Store")
-    # @ DisplayName("Check Inventory")
-    # @ Severity(SeverityLevel.NORMAL)
-    # void inventoryTest() {
-    # given(Specs.request)
-    # .when()
-    # .get("/v2/store/inventory")
-    # .then()
-    # .spec(Specs.responseSpec)
-    # .body("status", is (122));
-    # }
-    #
-    # @ Test
-    # @ Feature("Order")
-    # @ Story("Order")
-    # @ DisplayName("Find order")
-    # @ Severity(SeverityLevel.CRITICAL)
-    # void findOrderTest() {
-    # given(Specs.request)
-    # .when()
-    # .get("/v2/store/order/2")
-    # .then()
-    # .statusCode(404)
-    # .body("message", is ("Order not found"));
-    # }
-    #
-    # @ Test
-    # @ Feature("Pet")
-    # @ Story("Pet")
-    # @ DisplayName("Create pet")
-    # @ Severity(SeverityLevel.BLOCKER)
-    # void createPetTest() {
-    # Pet newPet = DataGenerator.getPet(8, 16, true, true, true);
-    #
-    # Integer response = given(Specs.request)
-    # .body(newPet)
-    # .when()
-    # .post("/v2/pet")
-    # .then()
-    # .spec(Specs.responseSpec)
-    # .extract().path("id");
-    #
-    # assertThat(response).isEqualTo(newPet.getId());
-    # }
+
+@allure.feature("Order")
+@allure.story("Order")
+@allure.severity(allure.severity_level.NORMAL)
+@allure.title("Create Order")
+def test_create_order(base_url):
+    payload = {
+        "petId": 55555,
+        "quantity": 1,
+        "shipDate": "2024-08-27T17:43:07.742Z",
+        "status": "placed",
+        "complete": True
+    }
+    headers = {
+        "Content-Type": "application/json",
+        "accept": "application/json"
+    }
+    response = requests.post(base_url + '/v2/store/order', headers=headers, json=payload)
+    assert response.status_code == 200
+    assert response.json()["id"], "Поле ID не должно быть пустым"
+    assert response.json()["petId"] == 55555
+    assert response.json()["status"] == "placed"
+
+    schema = path('create_order.json')
+
+    with open(schema) as file:
+        f = file.read()
+        validate(response.json(), schema=json.loads(f))
+
+
+@allure.feature("Store")
+@allure.story("Store")
+@allure.severity(allure.severity_level.NORMAL)
+@allure.title("Check Inventory")
+def test_check_inventory(base_url):
+    response = requests.get(base_url + '/v2/store/inventory')
+    assert response.status_code == 200
+    assert response.json()["sold"]
+    assert response.json()["Available"]
+
+    schema = path('inventory.json')
+
+    with open(schema) as file:
+        f = file.read()
+        validate(response.json(), schema=json.loads(f))
+
+
+@allure.feature("Order")
+@allure.story("Order")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("Find order")
+def test_find_order(base_url):
+    response = requests.get(base_url + '/v2/store/order/8')
+    assert response.status_code == 200
+    assert response.json()["petId"] == 7
+    assert response.json()["status"] == "placed"
+
+    schema = path('order.json')
+
+    with open(schema) as file:
+        f = file.read()
+        validate(response.json(), schema=json.loads(f))
+
+
+@allure.feature("Pet")
+@allure.story("Pet")
+@allure.severity(allure.severity_level.BLOCKER)
+@allure.title("Create pet")
+def test_create_pet(base_url):
+    payload = {
+        "name": "pet",
+        "status": "available"
+    }
+    headers = {
+        "Content-Type": "application/json",
+        "accept": "application/json"
+    }
+    response = requests.post(base_url + '/v2/pet', headers=headers, json=payload)
+    assert response.status_code == 200
+    assert response.json()["id"], "Поле ID не должно быть пустым"
+    assert response.json()["name"] == "pet"
+    assert response.json()["status"] == "available"
+
+    schema = path('pet.json')
+
+    with open(schema) as file:
+        f = file.read()
+        validate(response.json(), schema=json.loads(f))

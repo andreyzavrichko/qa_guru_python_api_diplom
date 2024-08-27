@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "3000": {
+      "type": "integer"
+    },
+    "5000": {
+      "type": "integer"
+    },
+    "totvs": {
+      "type": "integer"
+    },
+    "sold": {
+      "type": "integer"
+    },
+    "string": {
+      "type": "integer"
+    },
+    "Adopted": {
+      "type": "integer"
+    },
+    "unavailable": {
+      "type": "integer"
+    },
+    "pending": {
+      "type": "integer"
+    },
+    "available": {
+      "type": "integer"
+    },
+    "active": {
+      "type": "integer"
+    },
+    "PENDING": {
+      "type": "integer"
+    },
+    "avalable": {
+      "type": "integer"
+    },
+    "soldout": {
+      "type": "integer"
+    },
+    "notavailable": {
+      "type": "integer"
+    },
+    "SOLD": {
+      "type": "integer"
+    },
+    "unavaiable": {
+      "type": "integer"
+    },
+    "Available": {
+      "type": "integer"
+    },
+    "Pending": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "pending",
+    "available",
+    "avalable",
+    "soldout",
+    "notavailable",
+    "unavaiable",
+    "Pending"
+  ]
+}
