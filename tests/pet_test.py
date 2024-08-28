@@ -13,7 +13,7 @@ from utils.schema import validate_json_schema
 @pytest.mark.parametrize("status", ["available", "pending", "sold", "null"])
 def test_find_by_status(base_url, status):
     params = {"status": status}
-    response = requests.get_request(base_url + '/v2/pet/findByStatus', params=params)
+    response = requests.get_request(base_url + '/pet/findByStatus', params=params)
     assert response.status_code == 200
     data = response.json()
     for item in data:
@@ -27,7 +27,7 @@ def test_find_by_status(base_url, status):
 @allure.severity(allure.severity_level.NORMAL)
 @allure.title("Find by pet ID")
 def test_find_pet_by_id(base_url):
-    response = requests.get_request(base_url + '/v2/pet/9223372036854775000')
+    response = requests.get_request(base_url + '/pet/9223372036854775000')
     assert response.status_code == 200
     assert response.json()["id"] == 9223372036854775000
     assert response.json()["name"] == "doggie"
@@ -39,7 +39,7 @@ def test_find_pet_by_id(base_url):
 @allure.severity(allure.severity_level.BLOCKER)
 @allure.title("Create pet")
 def test_create_pet(base_url):
-    response = requests.post_request(base_url + '/v2/pet', json=pet_first)
+    response = requests.post_request(base_url + '/pet', json=pet_first)
     assert response.status_code == 200
     assert response.json()["id"], "Поле ID не должно быть пустым"
     assert response.json()["name"] == pet_first.get("name")
