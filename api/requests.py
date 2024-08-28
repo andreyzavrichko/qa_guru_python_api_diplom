@@ -18,7 +18,11 @@ def get_request(url, params=None):
     return response
 
 
-def post_request(url, headers, json):
+def post_request(url, json):
+    headers = {
+        "Content-Type": "application/json",
+        "accept": "application/json"
+    }
     response = requests.post(
         url=url,
         headers=headers,
