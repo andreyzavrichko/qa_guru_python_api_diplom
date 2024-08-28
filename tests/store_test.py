@@ -9,13 +9,14 @@ from utils.schema import validate_json_schema
 @allure.story("Order")
 @allure.severity(allure.severity_level.NORMAL)
 @allure.title("Create Order")
-def test_create_order(base_url):
+def test_create_order(base_url, delete_order):
     response = requests.post_request(base_url + '/store/order', json=order_first)
     assert response.status_code == 200, "Ожидается статус код 200"
     assert response.json()["id"], "Поле ID не должно быть пустым"
     assert response.json()["petId"] == order_first.get("petId")
     assert response.json()["status"] == order_first.get("status")
     validate_json_schema("store/create_order.json", response)
+    delete_order(response.json()["id"])
 
 
 @allure.feature("Store")
@@ -34,12 +35,13 @@ def test_check_inventory(base_url):
 @allure.story("Order")
 @allure.severity(allure.severity_level.CRITICAL)
 @allure.title("Find order")
-def test_find_order(base_url):
-    response = requests.get_request(base_url + '/store/order/8')
+def test_find_order(base_url, create_order, delete_order):
+    order_id = create_order
+    response = requests.get_request(base_url + f'/store/order/{order_id}')
     assert response.status_code == 200, "Ожидается статус код 200"
-    assert response.json()["petId"] == 7
-    assert response.json()["status"] == "placed"
+    assert response.json()["petId"] == order_first.get("petId")
     validate_json_schema("store/order.json", response)
+    delete_order(response.json()["id"])
 
 
 @allure.feature("Order")

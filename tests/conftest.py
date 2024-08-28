@@ -39,3 +39,12 @@ def delete_pet(base_url):
 
     yield _delete_pet
 
+
+@pytest.fixture
+def delete_order(base_url):
+    def _delete_order(order_id):
+        with allure.step('Отправить запрос на удаление заказа'):
+            response = requests.delete_request(base_url + f'/store/order/{order_id}')
+            assert response.status_code == 200, "Ожидается статус код 200"
+
+    yield _delete_order
