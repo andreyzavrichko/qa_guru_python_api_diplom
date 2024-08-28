@@ -22,4 +22,3 @@ order_first = {
     "status": random.choice(["placed", "approved", "delivered"]),
     "complete": random.choice([True, False])
 }
-

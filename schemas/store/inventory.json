@@ -58,12 +58,6 @@
     }
   },
   "required": [
-    "pending",
-    "available",
-    "avalable",
-    "soldout",
-    "notavailable",
-    "unavaiable",
-    "Pending"
+    "pending"
   ]
 }
