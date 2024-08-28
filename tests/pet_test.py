@@ -26,12 +26,13 @@ def test_find_by_status(base_url, status):
 @allure.story("Pet")
 @allure.severity(allure.severity_level.NORMAL)
 @allure.title("Find by pet ID")
-def test_find_pet_by_id(base_url, create_pet):
+def test_find_pet_by_id(base_url, create_pet, delete_pet):
     pet_id = create_pet
     response = requests.get_request(base_url + f'/pet/{pet_id}')
     assert response.status_code == 200, "Ожидается статус код 200"
     assert response.json()["id"] == pet_id, "id не совпадают"
     validate_json_schema("pet/find_by_pet_id.json", response)
+    delete_pet(pet_id)
 
 
 @allure.feature("Pet")
