@@ -26,11 +26,11 @@ def test_find_by_status(base_url, status):
 @allure.story("Pet")
 @allure.severity(allure.severity_level.NORMAL)
 @allure.title("Find by pet ID")
-def test_find_pet_by_id(base_url):
-    response = requests.get_request(base_url + '/pet/9223372036854775000')
+def test_find_pet_by_id(base_url, create_pet):
+    pet_id = create_pet
+    response = requests.get_request(base_url + f'/pet/{pet_id}')
     assert response.status_code == 200, "Ожидается статус код 200"
-    assert response.json()["id"] == 9223372036854775000
-    assert response.json()["name"] == "doggie"
+    assert response.json()["id"] == pet_id, "id не совпадают"
     validate_json_schema("pet/find_by_pet_id.json", response)
 
 
@@ -38,10 +38,11 @@ def test_find_pet_by_id(base_url):
 @allure.story("Pet")
 @allure.severity(allure.severity_level.BLOCKER)
 @allure.title("Create pet")
-def test_create_pet(base_url):
+def test_create_pet(base_url, delete_pet):
     response = requests.post_request(base_url + '/pet', json=pet_first)
     assert response.status_code == 200, "Ожидается статус код 200"
     assert response.json()["id"], "Поле ID не должно быть пустым"
     assert response.json()["name"] == pet_first.get("name")
     assert response.json()["status"] == "available"
     validate_json_schema("pet/pet.json", response)
+    delete_pet(response.json()["id"])
