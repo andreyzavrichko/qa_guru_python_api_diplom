@@ -14,7 +14,7 @@ from utils.schema import validate_json_schema
 def test_find_by_status(base_url, status):
     params = {"status": status}
     response = requests.get_request(base_url + '/pet/findByStatus', params=params)
-    assert response.status_code == 200
+    assert response.status_code == 200, "Ожидается статус код 200"
     data = response.json()
     for item in data:
         assert 'id' in item, f"Поле 'id' отсутствует в элементе: {item}"
@@ -28,7 +28,7 @@ def test_find_by_status(base_url, status):
 @allure.title("Find by pet ID")
 def test_find_pet_by_id(base_url):
     response = requests.get_request(base_url + '/pet/9223372036854775000')
-    assert response.status_code == 200
+    assert response.status_code == 200, "Ожидается статус код 200"
     assert response.json()["id"] == 9223372036854775000
     assert response.json()["name"] == "doggie"
     validate_json_schema("pet/find_by_pet_id.json", response)
@@ -40,7 +40,7 @@ def test_find_pet_by_id(base_url):
 @allure.title("Create pet")
 def test_create_pet(base_url):
     response = requests.post_request(base_url + '/pet', json=pet_first)
-    assert response.status_code == 200
+    assert response.status_code == 200, "Ожидается статус код 200"
     assert response.json()["id"], "Поле ID не должно быть пустым"
     assert response.json()["name"] == pet_first.get("name")
     assert response.json()["status"] == "available"

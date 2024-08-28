@@ -11,8 +11,8 @@ from utils.schema import validate_json_schema
 @allure.title("Create User")
 def test_create_user(base_url):
     response = requests.post_request(base_url + '/user', json=user_first)
-    assert response.status_code == 200
-    assert response.json()["type"] == "unknown"
+    assert response.status_code == 200, "Ожидается статус код 200"
+    assert response.json()["type"] == "unknown", "type должен быть unknown"
     assert response.json()["message"], "message не может быть пустым"
     validate_json_schema("user/create_user.json", response)
 
@@ -24,8 +24,8 @@ def test_create_user(base_url):
 def test_create_user_with_array(base_url):
     payload = [user_first]
     response = requests.post_request(base_url + '/user/createWithArray', json=payload)
-    assert response.status_code == 200
-    assert response.json()["type"] == "unknown"
+    assert response.status_code == 200, "Ожидается статус код 200"
+    assert response.json()["type"] == "unknown", "type должен быть unknown"
     assert response.json()["message"], "ok"
     validate_json_schema("user/create_user.json", response)
 
@@ -37,9 +37,9 @@ def test_create_user_with_array(base_url):
 def test_create_user_with_list(base_url):
     payload = [user_first]
     response = requests.post_request(base_url + '/user/createWithList', json=payload)
-    assert response.status_code == 200
-    assert response.json()["type"] == "unknown"
-    assert response.json()["message"], "ok"
+    assert response.status_code == 200, "Ожидается статус код 200"
+    assert response.json()["type"] == "unknown", "type должен быть unknown"
+    assert response.json()["message"] == "ok", "message должен быть ok"
     validate_json_schema("user/create_user.json", response)
 
 
@@ -49,10 +49,10 @@ def test_create_user_with_list(base_url):
 @allure.title("Get User")
 def test_get_user(base_url):
     response = requests.get_request(base_url + '/user/Andrey')
-    assert response.status_code == 200
-    assert response.json()["username"] == "Andrey"
-    assert response.json()["firstName"] == "Ivanov"
-    assert response.json()["email"] == "test@test.ru"
+    assert response.status_code == 200, "Ожидается статус код 200"
+    assert response.json()["username"] == "Andrey", "username не совпадает"
+    assert response.json()["firstName"] == "Ivanov", "firstName не совпадает"
+    assert response.json()["email"] == "test@test.ru", "email не совпадает"
     validate_json_schema("user/get_user.json", response)
 
 
@@ -62,9 +62,9 @@ def test_get_user(base_url):
 @allure.title("Get not found User")
 def test_get_not_found_user(base_url):
     response = requests.get_request(base_url + '/user/user55')
-    assert response.status_code == 404
-    assert response.json()["type"] == "error"
-    assert response.json()["message"] == "User not found"
+    assert response.status_code == 404, "Ожидается статус код 404"
+    assert response.json()["type"] == "error", "type должен быть error"
+    assert response.json()["message"] == "User not found", "message должен быть 'User not found'"
     validate_json_schema("user/user_not_found.json", response)
 
 
@@ -74,6 +74,6 @@ def test_get_not_found_user(base_url):
 @allure.title("Get empty User")
 def test_get_empty_user(base_url):
     response = requests.get_request(base_url + '/user/')
-    assert response.status_code == 405
+    assert response.status_code == 405, "Ожидается статус код 405"
 
 
