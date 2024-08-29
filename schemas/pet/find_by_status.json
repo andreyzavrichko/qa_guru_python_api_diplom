@@ -30,7 +30,10 @@
           "type": "array",
           "items": [
             {
-              "type": "string"
+              "type": [
+                "string",
+                "null"
+              ]
             }
           ]
         },
@@ -61,7 +64,6 @@
       "required": [
         "id",
         "name",
-        "photoUrls",
         "tags",
         "status"
       ]
