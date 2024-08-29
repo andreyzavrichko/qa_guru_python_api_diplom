@@ -84,7 +84,7 @@ pytest
 ![This is an image](/design/images/dashboard_overview.png)
 ### Список результата выполнения тест-кейсов в Allure TestOps
 ![This is an image](/design/images/allure_report_features.png)
-### Пример автоматически сгенерированными тест-кейсами в Allure TestOps
+### Пример с автоматически сгенерированными тест-кейсами в Allure TestOps
 ![This is an image](/design/images/allure_testcases.png)
 ### Пример выполнения тестов в Allure TestOps
 ![This is an image](/design/images/launches.png)
