@@ -98,7 +98,10 @@ pytest
 ![This is an image](/design/images/graph.png)
 ### Графики Dashboards в Allure Report
 ![This is an image](/design/images/graph2.png)
-
+### Категории ошибок в Allure Report
+![This is an image](/design/images/categories.png)
+### Timeline выполнения тестов в Allure Report
+![This is an image](/design/images/timeline.png)
 ## Настроено автоматическое оповещение о результатах сборки Jenkins в Telegram-бот
 ![This is an image](/design/images/bot.png)
 
