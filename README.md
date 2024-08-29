@@ -72,7 +72,6 @@ pip install -r requirements.txt
 pytest 
 ```
 ## Запуск автотестов выполняется на сервере Jenkins
-> <a target="_blank" href="https://jenkins.autotests.cloud/job/10-azavrichko-diplom_api/">Ссылка на проект в Jenkins</a>
 
 ![This is an image](/design/images/jenkins.png)
 
